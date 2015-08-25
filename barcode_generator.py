@@ -72,7 +72,14 @@ else:
 # ___________________________________________________process
 
 # make list of the four bases
-l1 = ['a', 'c', 'g', 't']
+gene_bases = ['a', 'c', 'g', 't']
+
+# intialize list to keep track of possibilities used
+gene_permutation_list = []
+
+# Add 1 for each number, to be incremented to track changes
+for j in range(number-1):
+    gene_permutation_list.append(1)
 
 # initialze the barcode list
 barcode_list = []
@@ -102,12 +109,11 @@ import random
 # first comparison of "compare_barcode" function
 while not barcode_list:
     for i in range(length):
-        first_barcode.append(random.choice(l1))
+        first_barcode.append(random.choice(gene_bases))
     if maxgc >= gc_cont(first_barcode) >= mingc:
         barcode_list.append(first_barcode)
     else:
         first_barcode = []
-
 
 # the barcode "cradle": a place where each barcode will sit
 barcode = []
@@ -120,7 +126,14 @@ def make_barcode(length):
     # empties the barcode cradle
     barcode = []
     for i in range(length):
-        barcode.append(random.choice(l1))
+        barcode.append(random.choice(gene_bases))
+
+# Alternative that goes through possibilites one by one
+# Slower in most cases, but will hit every possibility
+def make_barcode_slow(barcode_gene_list):
+    global barcode
+    #empties the barcode cradle
+    barcode = []
 
 
 # barcode is tested vs the previously generated barcodes
