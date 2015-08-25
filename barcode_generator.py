@@ -165,6 +165,20 @@ def check_existing(csv_file, barcodes):
             # Assumes that barcodes will be located in the second row
             existing_barcode_list.append(row[1])
 
+    # Now go through the barcodes and see if the list is contained within any of them
+    # Remove those that do contain an existing barcode
+    # Adds to to_remove list, as to not skip any barcodes
+    barcodes_to_remove = []
+    for barcode in barcodes:
+        for existing in existing_barcode_list:
+            if existing in barcode:
+                barcodes_to_remove.append(barcode)
+            else:
+                continue
+    # Actually remove the barcode
+    for item_to_remove in barcodes_to_remove:
+        barcodes.remove(item_to_remove)
+
 # ___________________________________________________run functions
 
 # initialize count
