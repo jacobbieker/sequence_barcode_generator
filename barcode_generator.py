@@ -58,28 +58,48 @@ if maxgc == '':
 else:
     maxgc = float(maxgc) / 100
 
-print '\nThe default number of random codes to test is the total number of possibilities for the bp length. Eg. for an \n' \
-      'input length of 3, the total tries would be 4^3, or 64. Do not enter more than a million'
+print 'Go through every permutation of base pairs, or choose random codes? \n Note: Random codes are usually faster,' \
+      ' but every permutation garuntees every possibility tried'
 
-# ask what is the maximum number of random codes to be tested
-attempts = raw_input('How many attempts?:')
-if attempts == '':
-    # Gets the maximum number of possibilities based on 4 bp
-    attempts = 4**length
+boolean_random = raw_input('Random Codes? (Y/n): ')
+
+if boolean_random.lower() in ("y", "yes", "yeah", "si", "ja"):
+    boolean_random = True
 else:
-    attempts = int(attempts)
+    boolean_random = False
+
+# If True, the number of attempts has to be specified, else try every possibility
+if boolean_random:
+    print '\nThe default number of random codes to test is the total number of possibilities for the bp length. Eg. for an \n' \
+          'input length of 3, the total tries would be 4^3, or 64. Do not enter more than a million'
+
+    # ask what is the maximum number of random codes to be tested
+    attempts = raw_input('How many attempts?:')
+    if attempts == '':
+        # Gets the maximum number of possibilities based on 4 bp
+        attempts = 4**length
+    else:
+        attempts = int(attempts)
+else:
+    attempts = 4**length
 
 # ___________________________________________________process
 
 # make list of the four bases
 gene_bases = ['a', 'c', 'g', 't']
 
-# intialize list to keep track of possibilities used
-gene_permutation_list = []
+# intialize string to hold all characters necessary for permutations to work
+gene_permutation_list = ""
 
 # Add 1 for each number, to be incremented to track changes
 for j in range(number-1):
-    gene_permutation_list.append(1)
+    gene_permutation_list += "acgt"
+
+#Now create ever ypossibility for the the bp length
+import itertools
+all_permutations = itertools.permutations(gene_permutation_list, number)
+# Keep track of location in all permutation list
+all_permutations_loc = 0
 
 # initialze the barcode list
 barcode_list = []
@@ -130,19 +150,28 @@ def make_barcode(length):
 
 # Alternative that goes through possibilites one by one
 # Slower in most cases, but will hit every possibility
-def make_barcode_slow(barcode_gene_list):
+def make_barcode_slow(all_permutations, all_permutations_loc):
     global barcode
     #empties the barcode cradle
     barcode = []
+    # Get the list in the permutation list
+    specific_permutation = all_permutations[all_permutations_loc]
+    all_permutations_loc += 1
+    for i in range(specific_permutation):
+        barcode.append(specific_permutation[i])
 
 
 # barcode is tested vs the previously generated barcodes
 def compare_barcode(length, barcode_l):
     count = 0
     global barcode
-    # run barcode creator
-    make_barcode(length)
-    # keep track of it
+    if boolean_random:
+        # run barcode creator
+        make_barcode(length)
+    else:
+        # run the slow barcode creator
+        make_barcode_slow(all_permutations=all_permutations, all_permutations_loc=all_permutations_loc)
+        # keep track of it
     tested.append(barcode)
     # testing of barcode
     if barcode not in barcode_list:
