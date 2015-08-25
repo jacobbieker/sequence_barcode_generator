@@ -102,8 +102,7 @@ import itertools
 all_permutations = itertools.permutations(gene_permutation_list, length)
 # Convert to a list
 all_permutations = list(all_permutations)
-for thing in all_permutations:
-    print thing
+
 # Keep track of location in all permutation list
 all_permutations_loc = 0
 
