@@ -58,7 +58,7 @@ if maxgc == '':
 else:
     maxgc = float(maxgc) / 100
 
-print '\nThe default number of random codes to test is the total number of possibilities for the bp length. Eg. for an ' \
+print '\nThe default number of random codes to test is the total number of possibilities for the bp length. Eg. for an \n' \
       'input length of 3, the total tries would be 4^3, or 64. Do not enter more than a million'
 
 # ask what is the maximum number of random codes to be tested
@@ -192,14 +192,27 @@ def check_existing(csv_file, barcodes):
 
 count_list = []
 
-# program stalls if too many attempts are allowed
-# and few barcodes remain to be discovered
-# this loop keeps the attempts within the range allowed
-while len(tested) < attempts:
-    if len(barcode_list) < number:
-        compare_barcode(length, barcode_list)
-    else:
-        break
+import os
+if os.path.isfile("existing_barcodes.csv"):
+    # program stalls if too many attempts are allowed
+    # and few barcodes remain to be discovered
+    # this loop keeps the attempts within the range allowed
+    while len(tested) < attempts:
+        if len(barcode_list) < number:
+            compare_barcode(length, barcode_list)
+            # Checks if any barcodes are in the existing_barcodes file
+            check_existing("existing_barcodes.csv", barcode_list)
+        else:
+            break
+else:
+    # program stalls if too many attempts are allowed
+    # and few barcodes remain to be discovered
+    # this loop keeps the attempts within the range allowed
+    while len(tested) < attempts:
+        if len(barcode_list) < number:
+            compare_barcode(length, barcode_list)
+        else:
+            break
 
 barcode_list.sort()
 
