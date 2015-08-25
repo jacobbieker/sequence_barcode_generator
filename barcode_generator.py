@@ -225,6 +225,8 @@ def check_existing(csv_file, barcodes):
         for existing in existing_barcode_list:
             if existing in barcode:
                 barcodes_to_remove.append(barcode)
+                print("Removing Barcode: ")
+                print(barcode)
             else:
                 continue
     # Actually remove the barcode
