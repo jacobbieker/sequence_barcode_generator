@@ -100,9 +100,6 @@ for j in range(length):
 #Now create ever ypossibility for the the bp length
 import itertools
 all_permutations = itertools.permutations(gene_permutation_list, length)
-# Convert to a list
-all_permutations = list(all_permutations)
-
 # Keep track of location in all permutation list
 all_permutations_loc = 0
 
@@ -156,19 +153,15 @@ def make_barcode(length):
 # Alternative that goes through possibilites one by one
 # Slower in most cases, but will hit every possibility
 def make_barcode_slow(all_permutations):
-    print("Trying make_barcode_slow")
     global barcode
     global all_permutations_loc
     #empties the barcode cradle
     barcode = []
     # Get the list in the permutation list
-    specific_permutation = all_permutations[all_permutations_loc]
-    print(specific_permutation)
+    specific_permutation = all_permutations.next()
     all_permutations_loc += 1
     for i in range(length):
         barcode.append(specific_permutation[i])
-        print("Permutation Tried: ")
-        print(specific_permutation[i])
 
 
 # barcode is tested vs the previously generated barcodes
@@ -217,7 +210,7 @@ def check_existing(csv_file, barcodes):
     import csv
     existing_barcode_list = []
     with open(csv_file, 'r') as csvfile:
-        existing_codes = csv.reader(csvfile, deliminator=',')
+        existing_codes = csv.reader(csvfile)
         headers = existing_codes.next()
         for row in existing_codes:
             # Go through and get each barcode and add to list
@@ -246,25 +239,34 @@ count_list = []
 
 import os
 if os.path.isfile("existing_barcodes.csv"):
-    # program stalls if too many attempts are allowed
-    # and few barcodes remain to be discovered
-    # this loop keeps the attempts within the range allowed
-    while len(tested) < attempts:
-        if len(barcode_list) < number:
+    # If going through every possiblity, don't stop until have enough barcodes
+    if boolean_random:
+        # program stalls if too many attempts are allowed
+        # and few barcodes remain to be discovered
+        # this loop keeps the attempts within the range allowed
+        while len(tested) < attempts:
+            if len(barcode_list) < number:
+                compare_barcode(length, barcode_list)
+                # Checks if any barcodes are in the existing_barcodes file
+                check_existing("existing_barcodes.csv", barcode_list)
+            else:
+                break
+    else:
+        while len(barcode_list) < number:
             compare_barcode(length, barcode_list)
             # Checks if any barcodes are in the existing_barcodes file
             check_existing("existing_barcodes.csv", barcode_list)
-        else:
-            break
 else:
-    # program stalls if too many attempts are allowed
-    # and few barcodes remain to be discovered
-    # this loop keeps the attempts within the range allowed
-    while len(tested) < attempts:
-        if len(barcode_list) < number:
+    if boolean_random:
+        # program stalls if too many attempts are allowed
+        # and few barcodes remain to be discovered
+        # this loop keeps the attempts within the range allowed
+        while len(tested) < attempts:
+            if len(barcode_list) < number:
+                compare_barcode(length, barcode_list)
+    else:
+        while len(barcode_list) < number:
             compare_barcode(length, barcode_list)
-        else:
-            break
 
 barcode_list.sort()
 
