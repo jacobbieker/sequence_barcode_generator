@@ -92,12 +92,16 @@ gene_bases = ['a', 'c', 'g', 't']
 gene_permutation_list = ""
 
 # Add 1 for each number, to be incremented to track changes
-for j in range(number-1):
+for j in range(length):
     gene_permutation_list += "acgt"
 
 #Now create ever ypossibility for the the bp length
 import itertools
 all_permutations = itertools.permutations(gene_permutation_list, number)
+# Convert to a list
+all_permutations = list(all_permutations)
+for thing in all_permutations:
+    print thing
 # Keep track of location in all permutation list
 all_permutations_loc = 0
 
@@ -150,15 +154,20 @@ def make_barcode(length):
 
 # Alternative that goes through possibilites one by one
 # Slower in most cases, but will hit every possibility
-def make_barcode_slow(all_permutations, all_permutations_loc):
+def make_barcode_slow(all_permutations):
+    print("Trying make_barcode_slow")
     global barcode
+    global all_permutations_loc
     #empties the barcode cradle
     barcode = []
     # Get the list in the permutation list
     specific_permutation = all_permutations[all_permutations_loc]
+    print(specific_permutation)
     all_permutations_loc += 1
-    for i in range(specific_permutation):
+    for i in range(length):
         barcode.append(specific_permutation[i])
+        print("Permutation Tried: ")
+        print(specific_permutation[i])
 
 
 # barcode is tested vs the previously generated barcodes
@@ -170,7 +179,7 @@ def compare_barcode(length, barcode_l):
         make_barcode(length)
     else:
         # run the slow barcode creator
-        make_barcode_slow(all_permutations=all_permutations, all_permutations_loc=all_permutations_loc)
+        make_barcode_slow(all_permutations=all_permutations)
         # keep track of it
     tested.append(barcode)
     # testing of barcode
