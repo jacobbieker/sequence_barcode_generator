@@ -1,5 +1,6 @@
-__author__ = 'Jacob Bieker'
 # !/usr/local/bin/python
+
+__author__ = 'Jacob Bieker'
 
 '''BARCODE GENERATOR
     BY Luca Comai and Tyson Howell
@@ -15,6 +16,8 @@ are the illumina paired end primers\n'''
 
 
 # ___________________________________________________raw input
+
+import math
 
 print 'Enter LENGTH as an integer (i.e. 4)'
 
@@ -55,12 +58,14 @@ if maxgc == '':
 else:
     maxgc = float(maxgc) / 100
 
-print '\nThe default number of random codes to test is 10000. Do not enter more than a million'
+print '\nThe default number of random codes to test is the total number of possibilities for the bp length. Eg. for an ' \
+      'input length of 3, the total tries would be 4^3, or 64. Do not enter more than a million'
 
 # ask what is the maximum number of random codes to be tested
 attempts = raw_input('How many attempts?:')
 if attempts == '':
-    attempts = 10000
+    # Gets the maximum number of possibilities based on 4 bp
+    attempts = 4**length
 else:
     attempts = int(attempts)
 
