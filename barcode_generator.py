@@ -59,7 +59,7 @@ else:
     maxgc = float(maxgc) / 100
 
 print 'Go through every permutation of base pairs, or choose random codes? \n Note: Random codes are usually faster,' \
-      ' but every permutation garuntees every possibility tried'
+      ' but every permutation guarantees every possibility tried'
 
 boolean_random = raw_input('Random Codes? (Y/n): ')
 
@@ -72,14 +72,13 @@ else:
 
 # If True, the number of attempts has to be specified, else try every possibility
 if boolean_random:
-    print '\nThe default number of random codes to test is the total number of possibilities for the bp length. Eg. for an \n' \
-          'input length of 3, the total tries would be 4^3, or 64. Do not enter more than a million'
+    print '\nThe default number of random codes to test is 1000. \n Do not enter more than a million'
 
     # ask what is the maximum number of random codes to be tested
     attempts = raw_input('How many attempts?:')
     if attempts == '':
         # Gets the maximum number of possibilities based on 4 bp
-        attempts = 4**length
+        attempts = 1000
     else:
         attempts = int(attempts)
 else:
@@ -223,7 +222,7 @@ def check_existing(csv_file, barcodes):
     barcodes_to_remove = []
     for barcode in barcodes:
         for existing in existing_barcode_list:
-            if existing in barcode:
+            if existing.lower() in barcode:
                 barcodes_to_remove.append(barcode)
                 print("Removing Barcode: ")
                 print(barcode)
