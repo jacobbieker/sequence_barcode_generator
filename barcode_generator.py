@@ -65,6 +65,8 @@ boolean_random = raw_input('Random Codes? (Y/n): ')
 
 if boolean_random.lower() in ("y", "yes", "yeah", "si", "ja"):
     boolean_random = True
+elif boolean_random == '':
+    boolean_random = True
 else:
     boolean_random = False
 
