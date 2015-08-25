@@ -99,7 +99,7 @@ for j in range(length):
 
 #Now create ever ypossibility for the the bp length
 import itertools
-all_permutations = itertools.permutations(gene_permutation_list, number)
+all_permutations = itertools.permutations(gene_permutation_list, length)
 # Convert to a list
 all_permutations = list(all_permutations)
 for thing in all_permutations:
