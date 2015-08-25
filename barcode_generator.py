@@ -3,9 +3,11 @@ __author__ = 'Jacob Bieker'
 
 '''BARCODE GENERATOR
     BY Luca Comai and Tyson Howell
-    December 2009'''
+    December 2009
 
-print '\n\nBARCODE GENERATOR by LC and TH\n\t--***---\nPlant Biology and Genome Center\n\tUC Davis\n'
+    Updated by Jacob Bieker 2015'''
+
+print '\n\nBARCODE GENERATOR by LC and TH\n\t--***---\nPlant Biology and Genome Center\n\tUC Davis\nUpdated by Jacob Bieker <jacob@bieker.tech>\n'
 print '''This program generates barcodes
 of a desired length, distance, and GC content
 The primer sequences currently used
@@ -93,10 +95,10 @@ import random
 # make the first barcode
 # add first barcode to barcode list. This is needed for the
 # first comparison of "compare_barcode" function
-while barcode_list == []:
+while not barcode_list:
     for i in range(length):
         first_barcode.append(random.choice(l1))
-    if gc_cont(first_barcode) <= maxgc and gc_cont(first_barcode) >= mingc:
+    if maxgc >= gc_cont(first_barcode) >= mingc:
         barcode_list.append(first_barcode)
     else:
         first_barcode = []
