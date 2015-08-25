@@ -13,6 +13,6 @@ Python 2.6+
 
 # How To Use
 
-1. Move the existing barcode file, called <code>existing_barcdes.csv<code> to the same folder as this script
+1. Move the existing barcode file, called <code>existing_barcdes.csv<\code> to the same folder as this script
 1. Open a command prompt or terminal in the directory that this script is located
-2. Run by typing <code>python barcode_generator.py<code> and following the onscreen directions
+2. Run by typing <code>python barcode_generator.py<\code> and following the onscreen directions
