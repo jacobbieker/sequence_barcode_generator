@@ -1,5 +1,5 @@
 __author__ = 'Jacob Bieker'
-#!/usr/local/bin/python
+# !/usr/local/bin/python
 
 '''BARCODE GENERATOR
     BY Luca Comai and Tyson Howell
@@ -12,7 +12,7 @@ The primer sequences currently used
 are the illumina paired end primers\n'''
 
 
-#___________________________________________________raw input
+# ___________________________________________________raw input
 
 print 'Enter LENGTH as an integer (i.e. 4)'
 
@@ -24,7 +24,7 @@ print '\nEnter the number of barcodes (default is LENGTH x 5)'
 # ask how many barcodes should be made
 number = raw_input("Total number of barcodes: ")
 if number == '':
-    number = length*5
+    number = length * 5
 else:
     number = int(number)
 
@@ -34,7 +34,7 @@ print '\nEnter the minimum number of different bases between barcodes (default i
 # between any two barcodes
 diffs = raw_input("Min. no. of different bases between barcodes: ")
 if diffs == '':
-    diffs = length//2
+    diffs = length // 2
 else:
     diffs = int(diffs)
 
@@ -62,7 +62,7 @@ if attempts == '':
 else:
     attempts = int(attempts)
 
-#___________________________________________________process
+# ___________________________________________________process
 
 # make list of the four bases
 l1 = ['a', 'c', 'g', 't']
@@ -77,7 +77,7 @@ first_barcode = []
 tested = []
 
 # function to determine GC content
-def gc_cont (bar_code):
+def gc_cont(bar_code):
     gc = 0.0
     for base in range(length):
         if bar_code[base] == 'c' or bar_code[base] == 'g':
@@ -105,7 +105,7 @@ while barcode_list == []:
 # the barcode "cradle": a place where each barcode will sit
 barcode = []
 
-#___________________________________________________define functions
+# ___________________________________________________define functions
 
 # function makes the barcode
 def make_barcode(length):
@@ -114,6 +114,7 @@ def make_barcode(length):
     barcode = []
     for i in range(length):
         barcode.append(random.choice(l1))
+
 
 # barcode is tested vs the previously generated barcodes
 def compare_barcode(length, barcode_l):
@@ -142,7 +143,7 @@ def compare_barcode(length, barcode_l):
         # if the barcode has enough unique bases
         # and the proper GC content, it is added
         # to the list of good barcodes
-        if max(count_list) > length-diffs:
+        if max(count_list) > length - diffs:
             count_list = []
         elif gc_cont(barcode) <= maxgc and gc_cont(barcode) >= mingc:
             barcode_list.append(barcode)
@@ -152,7 +153,19 @@ def compare_barcode(length, barcode_l):
     else:
         pass
 
-#___________________________________________________run functions
+def check_existing(csv_file, barcodes):
+    # Goes through the generate barcodes and sees if they contain an already existing barcode
+    import csv
+    existing_barcode_list = []
+    with open(csv_file, 'r') as csvfile:
+        existing_codes = csv.reader(csvfile, deliminator=',')
+        headers = existing_codes.next()
+        for row in existing_codes:
+            # Go through and get each barcode and add to list
+            # Assumes that barcodes will be located in the second row
+            existing_barcode_list.append(row[1])
+
+# ___________________________________________________run functions
 
 # initialize count
 
@@ -169,11 +182,10 @@ while len(tested) < attempts:
 
 barcode_list.sort()
 
-
 print "\n\nRESULTS\n\ngood barcodes and GC content:"
 
 for i in barcode_list:
-    print i, int(gc_cont(i)*100), '%'
+    print i, int(gc_cont(i) * 100), '%'
 
 print '\nnumber of tested barcodes:'
 
@@ -183,7 +195,7 @@ print '\nnumber of good barcodes:'
 
 print len(barcode_list)
 
-#count base composition in each of the barcode position
+# count base composition in each of the barcode position
 from collections import defaultdict
 
 print '\nbase compositions by position'
@@ -195,15 +207,15 @@ for pos in range(length):
         base_count[base] += 1
     print base_count.keys(), base_count.values()
 
-#___________________________________________________manipulate barcodes and print results
+# ___________________________________________________manipulate barcodes and print results
 
 # make a file for the barcoded primer sequence
 # open file
 barfile = open('barcode.txt', 'wb')
 
-print >> barfile, 'These are the barcodes of length '+str(length)+' with a distance of '+str(diffs)+' bases\n'
+print >> barfile, 'These are the barcodes of length ' + str(length) + ' with a distance of ' + str(diffs) + ' bases\n'
 
-#___________________________________________________primer sequence
+# ___________________________________________________primer sequence
 
 # modify the primer as desired. This seq is the
 # illumina PE primer
@@ -242,14 +254,15 @@ def reverse_comp(seq):
     except NameError:
         from string import maketrans
     finally:
-        comp_table = maketrans('actg','tgac')
+        comp_table = maketrans('actg', 'tgac')
         global comp_barcode
         comp_barcode = seq[::-1].translate(comp_table)
+
 
 for i in barcode_list:
     j = ''.join(i)
     reverse_comp(j)
-    print >> barfile, '%s%s\n%s%s\n%s%s\n%s%sT\n\n' %  (name_rootA, j, j, primerA, name_rootB, j, primerB, comp_barcode)
+    print >> barfile, '%s%s\n%s%s\n%s%s\n%s%sT\n\n' % (name_rootA, j, j, primerA, name_rootB, j, primerB, comp_barcode)
 
 print '''\nA file called barcode.txt has been generated.
 It contains the adapter sequences with each
@@ -258,7 +271,7 @@ barcode in lower case\n\n'''
 # close file or it does not get updated
 barfile.close()
 
-#___________________________________________________log
+# ___________________________________________________log
 
 # changes from 2.7:
 # rephrase raw input queries
