@@ -161,6 +161,7 @@ def make_barcode_slow(all_permutations):
     all_permutations_loc += 1
     for i in range(length):
         barcode.append(specific_permutation[i])
+        print(all_permutations_loc)
 
 
 # barcode is tested vs the previously generated barcodes
@@ -204,9 +205,9 @@ def compare_barcode(length, barcode_l):
     else:
         pass
 
+import csv
 def check_existing(csv_file, barcodes):
     # Goes through the generate barcodes and sees if they contain an already existing barcode
-    import csv
     existing_barcode_list = []
     with open(csv_file, 'r') as csvfile:
         existing_codes = csv.reader(csvfile)
@@ -222,7 +223,7 @@ def check_existing(csv_file, barcodes):
     barcodes_to_remove = []
     for barcode in barcodes:
         for existing in existing_barcode_list:
-            if existing.lower() in barcode:
+            if existing.lower() in barcode.lower():
                 barcodes_to_remove.append(barcode)
                 print("Removing Barcode: ")
                 print(barcode)
@@ -231,6 +232,21 @@ def check_existing(csv_file, barcodes):
     # Actually remove the barcode
     for item_to_remove in barcodes_to_remove:
         barcodes.remove(item_to_remove)
+
+num_of_existing = 0
+def get_num_of_existing(csv_file):
+    with open(csv_file, 'r') as csvfile:
+        contents = csv.reader(csvfile)
+        headers = contents.next()
+        for line in contents:
+            global num_of_existing
+            num_of_existing = line[0]
+            print(num_of_existing)
+
+def write_existing(csv_file, barcodes):
+    global num_of_existing
+    with open(csv_file, 'a') as csvfile:
+
 
 # ___________________________________________________run functions
 
@@ -300,7 +316,7 @@ for pos in range(length):
 
 # make a file for the barcoded primer sequence
 # open file
-barfile = open('barcode.txt', 'wb')
+barfile = open('barcode.txt', 'a')
 
 print >> barfile, 'These are the barcodes of length ' + str(length) + ' with a distance of ' + str(diffs) + ' bases\n'
 
