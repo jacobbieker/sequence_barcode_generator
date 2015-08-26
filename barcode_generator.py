@@ -222,7 +222,9 @@ def check_existing(csv_file, barcodes):
     # Adds to to_remove list, as to not skip any barcodes
     barcodes_to_remove = []
     for barcode in barcodes:
+        print barcode
         for existing in existing_barcode_list:
+            print existing
             if existing.lower() in barcode.lower():
                 barcodes_to_remove.append(barcode)
                 print("Removing Barcode: ")
@@ -317,9 +319,13 @@ for pos in range(length):
 
 # ___________________________________________________manipulate barcodes and print results
 
+# But the correct barcodes into the exisitng barcodes filefor later runs
+get_num_of_existing('existing_barcodes.csv')
+write_existing('existing_barcodes.csv', barcodes=barcode_list)
+
 # make a file for the barcoded primer sequence
 # open file
-barfile = open('barcode.txt', 'a')
+barfile = open('barcode.txt', 'wb')
 
 print >> barfile, 'These are the barcodes of length ' + str(length) + ' with a distance of ' + str(diffs) + ' bases\n'
 
