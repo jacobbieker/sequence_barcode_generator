@@ -244,9 +244,12 @@ def get_num_of_existing(csv_file):
             print(num_of_existing)
 
 def write_existing(csv_file, barcodes):
+    # Get the current last number of barcodes
     global num_of_existing
+    # Assume that not changing between the last use and this one
     with open(csv_file, 'a') as csvfile:
-
+        for barcode in barcodes:
+            csvfile.write(str(num_of_existing) + "," + str(barcode))
 
 # ___________________________________________________run functions
 

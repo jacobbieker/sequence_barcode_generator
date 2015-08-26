@@ -1,7 +1,7 @@
 __author__ = 'Jacob Bieker'
 
 
-barcodes = ['ATCACGTA', 'TATCACGA', 'TAATCACG']
+barcodes = ['ATCACGTA', 'TATCACGA', 'TAATCACG', 'TTAGGCTA', 'TGCATGCA']
 
 def check_existing(csv_file, barcodes):
     # Goes through the generate barcodes and sees if they contain an already existing barcode
@@ -31,5 +31,26 @@ def check_existing(csv_file, barcodes):
     for item_to_remove in barcodes_to_remove:
         barcodes.remove(item_to_remove)
 
+import csv
+num_of_existing = 0
+def get_num_of_existing(csv_file):
+    with open(csv_file, 'r') as csvfile:
+        contents = csv.reader(csvfile)
+        headers = contents.next()
+        for line in contents:
+            global num_of_existing
+            num_of_existing = line[0]
+            print(num_of_existing)
+
+def write_existing(csv_file, barcodes):
+    # Get the current last number of barcodes
+    global num_of_existing
+    # Assume that not changing between the last use and this one
+    num_of_existing += 1
+    with open(csv_file, 'a') as csvfile:
+        for barcode in barcodes:
+            csvfile.write(str(num_of_existing) + "," + str(barcode))
 
 check_existing('existing_barcodes.csv', barcodes)
+get_num_of_existing('existing_barcodes.csv')
+write_existing('existing_barcodes.csv', barcodes)
