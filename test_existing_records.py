@@ -1,7 +1,7 @@
 __author__ = 'Jacob Bieker'
 
 
-barcodes = ['ATCACGTA', 'TATCACGA', 'TAATCACG', 'TTAGGCTA', 'TGCATGCA']
+barcodes = ['ATCACGTA', 'TATCACGA', 'TAATCACG', 'TTAGGCTA', 'TGCATGCA', 'CACGTA']
 
 def check_existing(csv_file, barcodes):
     # Goes through the generate barcodes and sees if they contain an already existing barcode

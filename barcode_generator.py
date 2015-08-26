@@ -220,21 +220,17 @@ def check_existing(csv_file, barcodes):
     # Now go through the barcodes and see if the list is contained within any of them
     # Remove those that do contain an existing barcode
     # Adds to to_remove list, as to not skip any barcodes
-    barcodes_to_remove = []
     for barcode in barcodes:
         complete_barcode = ''
         for base_pair in barcode:
             complete_barcode+=base_pair
         for existing in existing_barcode_list:
             if existing.lower() in complete_barcode.lower():
-                barcodes_to_remove.append(barcode)
+                barcodes.remove(barcode)
                 print("Removing Barcode: ")
                 print(barcode)
             else:
                 continue
-    # Actually remove the barcode
-    for item_to_remove in barcodes_to_remove:
-        barcodes.remove(item_to_remove)
 
 num_of_existing = 0
 def get_num_of_existing(csv_file):
@@ -244,7 +240,6 @@ def get_num_of_existing(csv_file):
         for line in contents:
             global num_of_existing
             num_of_existing = line[0]
-            print(num_of_existing)
 
 def write_existing(csv_file, barcodes):
     # Get the current last number of barcodes
@@ -252,7 +247,11 @@ def write_existing(csv_file, barcodes):
     # Assume that not changing between the last use and this one
     with open(csv_file, 'a') as csvfile:
         for barcode in barcodes:
-            csvfile.write(str(num_of_existing) + "," + str(barcode))
+            num_of_existing = str(int(num_of_existing) + 1)
+            complete_barcode = ''
+            for base_pair in barcode:
+                complete_barcode+=str(base_pair)
+            csvfile.write('\n' + str(num_of_existing) + "," + str(complete_barcode))
 
 # ___________________________________________________run functions
 
@@ -322,11 +321,10 @@ for pos in range(length):
 
 # But the correct barcodes into the exisitng barcodes filefor later runs
 get_num_of_existing('existing_barcodes.csv')
-write_existing('existing_barcodes.csv', barcodes=barcode_list)
-
+write_existing('existing_barcodes.csv', barcode_list)
 # make a file for the barcoded primer sequence
 # open file
-barfile = open('barcode.txt', 'wb')
+barfile = open('barcode.txt', 'a')
 
 print >> barfile, 'These are the barcodes of length ' + str(length) + ' with a distance of ' + str(diffs) + ' bases\n'
 
